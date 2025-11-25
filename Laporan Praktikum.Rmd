@@ -1,0 +1,227 @@
+---
+title: "FInal Project ADD"
+author: "Kelompok 7 Kelas B"
+date: "2024-12-15"
+output: html_document
+---
+```{r}
+
+```
+
+
+```{r}
+library(purrr)
+library(ggplot2)
+library(gridExtra)
+library(dplyr)
+library(readr)
+library(readr)
+
+dataraw <- read_csv("Global Health Statistics.csv")
+View(dataraw)
+  
+#Filter dataset untuk tahun 2022
+data <- dataraw %>% filter(Country == "South Korea", Year == 2022)
+
+# Menghapus kolom yang tidak diperlu
+data <- data[, -c(1, 2,4,6,8,9,10,14,15,16,17,18,19,20,21,22)]
+print(data)
+```
+```{r}
+# Cek tipe data untuk menentukan kolom kategorikal
+str(data)  # Output struktur dataset
+sapply(data, class)  # Output tipe data tiap kolom
+
+# Mengubah semua kolom non-numerik menjadi numerik
+data <- data %>% mutate(across(where(is.character), ~ as.numeric(factor(.))))
+```
+
+```{r}
+dim(data)  # Output: (baris, kolom)
+str(data)
+summary(data)
+```
+```{r}
+#Rata-rata dan standar deviasi untuk semua kolom numerik
+mean_sd <- data %>%
+  summarise(across(where(is.numeric), 
+                   list(mean = mean, sd = sd)))
+print(mean_sd)
+```
+
+```{r}
+# Membuat boxplot dan histogram untuk setiap kolom numerik
+data %>% 
+  select(where(is.numeric)) %>% 
+  map2(colnames(data %>% select(where(is.numeric))), ~ {
+    # Membuat boxplot
+    box <- ggplot(data.frame(Value = .x), aes(y = Value)) +
+      geom_boxplot(fill = "lightblue") +
+      labs(title = paste("Boxplot:", .y), y = .y) +
+      theme_minimal()
+    
+    # Membuat histogram    
+      hist <- ggplot(data.frame(Value = .x), aes(x = Value)) +
+      geom_histogram(fill = "skyblue", bins = 20) +
+      labs(title = paste("Histogram:", .y), x = .y) +
+      theme_minimal() 
+
+    # Menyatukan boxplot dan histogram dalam satu tampilan
+    grid.arrange(box, hist, ncol = 2)
+  })
+```
+```{r}
+# Normalisasi Data
+
+data_normalized <- data %>%
+  select(where(is.numeric)) %>%
+  mutate(across(everything(), ~ (.-min(.)) / (max(.) - min(.))))
+```
+
+```{r}
+
+# Looping untuk setiap kolom numerik
+numeric_columns <- colnames(data_normalized)  # Ambil nama kolom numerik
+
+for (col in numeric_columns) {
+  # Atur layout: 2 baris, 2 kolom
+  par(mfrow = c(2, 2))  
+  
+  # Boxplot setelah normalisasi
+  boxplot(data_normalized[[col]], 
+          main = paste("Boxplot After -", col), 
+          col = "lightgreen", 
+          horizontal = TRUE,
+          las = 1)
+  
+  # Histogram setelah normalisasi
+  hist(data_normalized[[col]], 
+       main = paste("Histogram After -", col), 
+       col = "lightgreen", 
+       xlab = paste("Normalized", col))
+  
+  # Boxplot sebelum normalisasi
+  boxplot(data[[col]], 
+          main = paste("Boxplot Before -", col), 
+          col = "lightblue", 
+          horizontal = TRUE,
+          las = 1)
+  
+  # Histogram sebelum normalisasi
+  hist(data[[col]], 
+       main = paste("Histogram Before -", col), 
+       col = "lightblue", 
+       xlab = col)
+}
+```
+
+
+```{r}
+# Terapkan PCA
+pca_result <- prcomp(data_normalized, center = TRUE, scale. = TRUE)
+summary(pca_result)
+screeplot(pca_result, main = "Scree Plot", col = "blue")
+# Memeriksa loading scores
+loading_scores <- pca_result$rotation
+print(loading_scores)
+
+pca_var <- pca_result$sdev^2  # Variance dari setiap komponen
+pca_var_perc <- pca_var / sum(pca_var)  # Proportional Variance
+
+# Menampilkan proporsi variabilitas dalam persentase
+cumulative_variance <- cumsum(pca_var_perc)
+data.frame(PC = 1:length(pca_var_perc), Proportion_Variance = pca_var_perc, Cumulative_Variance = cumulative_variance)
+
+library(factoextra)
+# Ambil dua dimensi utama dari hasil PCA
+pca_data <- data.frame(PC1 = pca_result$x[, 1],
+                       PC2 = pca_result$x[, 2]
+                       )
+```
+
+
+```{r}
+set.seed(123)  # Untuk hasil konsisten
+kmeans_result3 <- kmeans(pca_data, centers = 3, nstart = 25)
+print(kmeans_result3)
+
+fviz_cluster(
+  kmeans_result3,
+  data = pca_data,
+  geom = "point",
+  ellipse.type = "convex",  # Pilih jenis area kluster
+  main = "K-Means Clustering"
+)
+
+# Menghitung Silhouette Score
+sil3 <- silhouette(kmeans_result3$cluster, dist(pca_data))
+avg_silhouette3 <- mean(sil3[, 3])
+print(paste("Average Silhouette Score:", avg_silhouette3))
+
+```
+
+```{r}
+kmeans_result4 <- kmeans(pca_data, centers = 4, nstart = 25)
+print(kmeans_result4)
+
+fviz_cluster(
+  kmeans_result4,
+  data = pca_data,
+  geom = "point",
+  ellipse.type = "convex",  # Pilih jenis area kluster
+  main = "K-Means Clustering"
+)
+
+# Menghitung Silhouette Score
+sil4 <- silhouette(kmeans_result4$cluster, dist(pca_data))
+avg_silhouette4 <- mean(sil4[, 3])
+print(paste("Average Silhouette Score:", avg_silhouette4))
+```
+
+```{r}
+kmeans_result5 <- kmeans(pca_data, centers = 5, nstart = 25)
+print(kmeans_result5)
+library(cluster)
+
+fviz_cluster(
+  kmeans_result5,
+  data = pca_data,
+  geom = "point",
+  ellipse.type = "convex",  # Pilih jenis area kluster
+  main = "K-Means Clustering"
+)
+
+# Menghitung Silhouette Score
+sil5 <- silhouette(kmeans_result5$cluster, dist(pca_data))
+avg_silhouette5 <- mean(sil5[, 3])
+print(paste("Average Silhouette Score:", avg_silhouette5))
+```
+
+```{r}
+# Hitung WCSS untuk beberapa jumlah kluster
+fviz_nbclust(pca_data, kmeans, method = "wss")
+fviz_nbclust(pca_data, kmeans, method = "silhouette")
+```
+
+```{r}
+# Tambahkan hasil kluster ke data asli
+data_with_clusters3 <- cbind(pca_data, Cluster = kmeans_result3$cluster)
+
+# Hitung rata-rata setiap variabel untuk masing-masing kluster
+cluster_summary3 <- data_with_clusters3 %>%
+  group_by(Cluster) %>%
+  summarise(across(where(is.numeric), mean, na.rm = TRUE))
+
+# Hitung standar deviasi setiap variabel untuk masing-masing kluster
+cluster_summary_std3 <- data_with_clusters3 %>%
+  group_by(Cluster) %>%
+  summarise(across(where(is.numeric), sd, na.rm = TRUE))
+
+# Cetak hasil rata-rata dan standar deviasi
+print("Cluster Means:")
+print(cluster_summary3)
+
+print("Cluster Standard Deviations:")
+print(cluster_summary_std3)
+
+```
