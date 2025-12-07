@@ -1,5 +1,9 @@
 ## 🧬 Final Project ADD – Clustering Analysis of Diseases in South Korea (2022)
 
+<p align="center">
+  <img src="https://drive.google.com/uc?export=view&id=1fE5wbIYfw6Ra4AkfA_91EmlN1GGQoS4o" alt="Project Preview" width="600">
+</p>
+
 Final Project – Algorithms & Data Diagnostics (ADD)
 Analisis clustering penyakit di Korea Selatan menggunakan algoritma K-Means untuk mengelompokkan negara berdasarkan indikator kesehatan global.
 
