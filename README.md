@@ -1,44 +1,28 @@
-## 🧬 Final Project ADD – Clustering Analysis of Diseases in South Korea (2022)
+## Final Project ADD – Clustering Analysis of Diseases in South Korea (2022)
 
 <p align="center">
   <img src="https://drive.google.com/uc?export=view&id=1fE5wbIYfw6Ra4AkfA_91EmlN1GGQoS4o" alt="Project Preview" width="100%">
 </p>
 
 Final Project – Algorithms & Data Diagnostics (ADD)
-Analisis clustering penyakit di Korea Selatan menggunakan algoritma K-Means untuk mengelompokkan negara berdasarkan indikator kesehatan global.
+Analisis Clustering Penyakit di Korea Selatan Tahun 2022 dengan Metode K-Means untuk Identifikasi Beban Kesehatan dan Ketimpangan Akses
 
-## 👤 Kontributor
+Proyek ini menganalisis dataset kesehatan global menggunakan metode unsupervised learning, yaitu K-Means Clustering, untuk mengidentifikasi pola epidemiologi dan perbedaan karakteristik penyakit antar negara. Seluruh proses dilakukan menggunakan R Markdown yang kemudian diekspor menjadi laporan praktikum akhir.
+
+## Kontributor
 1. M. Zaky Alkhair	
 2. Nailah Adlina
 3. Davina Almeira
 4. Nadya Luthfiyah Rahma
 5. Naura Salsabila
 
-## 📌 Deskripsi Singkat
+## Dataset
 
-Proyek ini menganalisis dataset kesehatan global menggunakan metode unsupervised learning, yaitu K-Means Clustering, untuk mengidentifikasi pola epidemiologi dan perbedaan karakteristik penyakit antar negara. Seluruh proses dilakukan menggunakan R Markdown yang kemudian diekspor menjadi laporan praktikum akhir.
-
-## 📂 Dataset
-
-Dataset yang digunakan berasal dari Kaggle:
-
-## 🔗 Global Health Statistics – Kaggle
-https://www.kaggle.com/datasets/malaiarasugraj/global-health-statistics/data
-
+Dataset yang digunakan berasal dari Kaggle:  
+[Global Health Statistics — Kaggle Dataset](https://www.kaggle.com/datasets/malaiarasugraj/global-health-statistics/data)
 Dataset ini berisi indikator kesehatan global seperti angka kematian, penyakit tidak menular, penyakit menular, faktor risiko, dan statistik kesehatan publik lainnya.
 
-## 📂 Struktur Repository
-```text
-Final-Project-ADD/
-│
-├── Laporan Praktikum.Rmd       # File analisis utama (R Markdown)
-├── Laporan Praktikum.html      # (opsional) Output report
-├── data/                       # Dataset mentah/olahan
-├── output/                     # Grafik dan hasil clustering
-└── README.md                   # Dokumentasi proyek
-```
-
-## 🛠️ Teknologi yang Digunakan
+## Teknologi yang Digunakan
 
 ## R / RStudio
 
@@ -48,7 +32,7 @@ Package utama:
 -factoextra
 -ggplot2
 
-📥 Cara Menjalankan Proyek
+Cara Menjalankan Proyek
 
 1. Clone repository:
 ```text
