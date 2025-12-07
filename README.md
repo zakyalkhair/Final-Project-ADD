@@ -1,7 +1,7 @@
 ## 🧬 Final Project ADD – Clustering Analysis of Diseases in South Korea (2022)
 
 <p align="center">
-  <img src="https://drive.google.com/uc?export=view&id=1fE5wbIYfw6Ra4AkfA_91EmlN1GGQoS4o" alt="Project Preview" width="600">
+  <img src="https://drive.google.com/uc?export=view&id=1fE5wbIYfw6Ra4AkfA_91EmlN1GGQoS4o" alt="Project Preview" width="100%">
 </p>
 
 Final Project – Algorithms & Data Diagnostics (ADD)
